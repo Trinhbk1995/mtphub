@@ -77,7 +77,7 @@ window.MTPHUB_DEFAULT_DATA = {
       "badge": "CPU + GPU X5",
       "version": "v4.0 Portable",
       "visualTheme": "voiceclone",
-      "demoVideoUrl": "",
+      "demoVideoUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/AI_Voice_Clone_Pro_v4_Huong_Dan.mp4",
       "downloadUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/AI_Voice_Clone_Pro_v4.0_Portable.rar",
       "downloadUrlGpu": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/AI_Voice_Clone_Pro_v4.0_NVIDIA_GPU.rar",
       "requireHardwareId": true,

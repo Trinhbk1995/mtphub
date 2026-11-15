@@ -409,7 +409,7 @@ function renderToolsGrid() {
           <div class="thumb-play-overlay">
             <div class="play-circle">▶</div>
           </div>
-          <span class="thumb-corner-tag">${tool.demoVideoUrl ? '🎬 Video Demo' : '✨ Xem Tính Năng'}</span>
+          <span class="thumb-corner-tag">${tool.demoVideoUrl ? '🎬 Xem Video Hướng Dẫn' : '✨ Xem Tính Năng'}</span>
         </div>
 
         <h3 class="tool-title">${escapeHtml(tool.name)}</h3>
@@ -545,13 +545,20 @@ function openDetailModal(toolId) {
   if (!tool) return;
 
   const ytId = extractYouTubeId(tool.demoVideoUrl);
-  const mediaHtml = ytId
-    ? `<div style="position:relative; padding-top:56.25%; border-radius:14px; overflow:hidden; margin-bottom:20px; border:1px solid var(--border-subtle);">
+  let mediaHtml = '';
+  if (ytId) {
+    mediaHtml = `<div style="position:relative; padding-top:56.25%; border-radius:14px; overflow:hidden; margin-bottom:20px; border:1px solid var(--border-subtle);">
          <iframe src="https://www.youtube.com/embed/${ytId}?rel=0" style="position:absolute; inset:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
-       </div>`
-    : `<div style="height:230px; border-radius:14px; overflow:hidden; margin-bottom:20px; border:1px solid var(--border-subtle);">
+       </div>`;
+  } else if (tool.demoVideoUrl && (tool.demoVideoUrl.endsWith('.mp4') || tool.demoVideoUrl.includes('.mp4'))) {
+    mediaHtml = `<div style="border-radius:14px; overflow:hidden; margin-bottom:20px; border:1px solid rgba(168,85,247,0.4); background:#000;">
+         <video controls autoplay style="width:100%; max-height:420px; display:block;" src="${escapeHtml(tool.demoVideoUrl)}">Trình duyệt không hỗ trợ thẻ video.</video>
+       </div>`;
+  } else {
+    mediaHtml = `<div style="height:230px; border-radius:14px; overflow:hidden; margin-bottom:20px; border:1px solid var(--border-subtle);">
          ${getToolThumbnailHtml(tool)}
        </div>`;
+  }
 
   const featuresHtml = (tool.features || [])
     .map(
