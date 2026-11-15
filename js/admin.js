@@ -555,7 +555,36 @@ function closeAdminModal(id) {
   document.getElementById(id)?.classList.remove('open');
 }
 
+async function publishToLiveWeb() {
+  const btn = document.getElementById('publishLiveBtn');
+  const oldLabel = btn ? btn.textContent : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ Đang đẩy lên mtphub.com...';
+  }
+  try {
+    const res = await apiAdmin('/api/admin/publish', 'POST', {});
+    toast('🚀 ' + (res.message || 'Đã cập nhật lên https://mtphub.com/ thành công!'));
+  } catch (err) {
+    toast('❌ Lỗi đẩy web online: ' + err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = oldLabel || '🚀 Cập Nhật Lên mtphub.com';
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  const host = window.location.hostname;
+  const isLocal = host === 'localhost' || host === '127.0.0.1';
+  if (!isLocal) {
+    const notice = document.getElementById('cloudAdminNotice');
+    const form = document.getElementById('adminLoginForm');
+    if (notice) notice.style.display = 'block';
+    if (form) form.style.display = 'none';
+    return;
+  }
   if (adminState.token) {
     refreshDashboard();
   }

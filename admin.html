@@ -22,7 +22,20 @@
         </div>
       </div>
 
-      <form onsubmit="handleAdminLogin(event)">
+      <div id="cloudAdminNotice" style="display:none; margin-bottom:18px; padding:14px; border-radius:12px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.4); font-size:13.5px; line-height:1.55;">
+        <div style="font-weight:800; color:#34d399; margin-bottom:6px;">🔒 Chế độ Bảo mật Chống Hack Từ Xa</div>
+        <div style="color:#e2e8f0; margin-bottom:12px;">
+          Để không ai trên mạng có thể dò mật khẩu hay tráo mã QR ngân hàng của bạn, bảng chỉnh sửa chỉ mở độc quyền trên máy tính chủ của <strong>Trịnh AI</strong>:
+        </div>
+        <a href="http://localhost:3088/admin" class="btn btn-emerald" style="width:100%; justify-content:center;">
+          ⚡ Mở Trang Chỉnh Sửa Trực Tiếp (localhost:3088)
+        </a>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:8px; text-align:center;">
+          *(Nếu bấm chưa lên, hãy nhấp đúp file <code>CHAY_WEB_MTPHUB.bat</code> trong máy trước)*
+        </div>
+      </div>
+
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
         <div class="form-group">
           <label class="field-label" for="adminPassInput">Mật khẩu Quản trị viên</label>
           <input
@@ -84,9 +97,10 @@
           <h1 style="font-size:24px; font-weight:800;" id="adminPageTitle">Bảng Điều Khiển & Quản Lý Đơn Hàng</h1>
           <p style="font-size:13.5px; color:var(--text-secondary);">Mọi thay đổi được lưu trực tiếp và cập nhật ngay lên trang bán hàng.</p>
         </div>
-        <div style="display:flex; gap:10px;">
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
           <button type="button" class="btn btn-outline" onclick="refreshDashboard()">🔄 Làm Mới</button>
           <button type="button" class="btn btn-primary" onclick="openToolEditor(null)">➕ Thêm Tool Mới</button>
+          <button type="button" id="publishLiveBtn" class="btn btn-emerald" onclick="publishToLiveWeb()">🚀 Cập Nhật Lên mtphub.com</button>
         </div>
       </div>
 

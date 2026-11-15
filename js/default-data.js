@@ -1,3 +1,5 @@
+// Tệp dữ liệu công khai tự động đồng bộ từ Trang Quản Trị Admin MTP Hub
+// Dùng cho cả chế độ Hosting tĩnh 0đ (Cloudflare Pages / Vercel / GitHub Pages)
 window.MTPHUB_DEFAULT_DATA = {
   "settings": {
     "brandName": "MTP HUB • TRỊNH AI",
