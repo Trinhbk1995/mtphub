@@ -386,13 +386,16 @@ function renderToolsGrid() {
       const minPlan = getLowestPlan(tool);
       const hasMultiPlans = (tool.plans || []).length > 1 && minPlan && minPlan.price < mainPlan.price;
 
-      const downloadAction =
-        tool.downloadUrl && tool.downloadUrl !== '#'
-          ? `window.open('${escapeHtml(tool.downloadUrl)}', '_blank')`
-          : `openDetailModal('${escapeHtml(tool.id)}')`;
+      const hasAnyDownload =
+        (tool.downloadUrl && tool.downloadUrl !== '#') ||
+        Boolean(tool.downloadUrlGpu) ||
+        (Array.isArray(tool.downloadGpuParts) && tool.downloadGpuParts.length > 0);
 
-      const downloadLabel =
-        tool.downloadUrl && tool.downloadUrl !== '#' ? '📥 Tải Bản Cài' : '🎬 Xem Chi Tiết';
+      const downloadAction = hasAnyDownload
+        ? `handleToolDownload('${escapeHtml(tool.id)}')`
+        : `openDetailModal('${escapeHtml(tool.id)}')`;
+
+      const downloadLabel = hasAnyDownload ? '📥 Tải Bản Cài' : '🎬 Xem Chi Tiết';
 
       return `
       <article class="tool-card">
@@ -444,6 +447,97 @@ function renderToolsGrid() {
 }
 
 // ============================================================================
+// XỬ LÝ TẢI BỘ CÀI (1 BẢN TRỰC TIẾP HOẶC BẢNG CHỌN BẢN CPU / NVIDIA GPU)
+// ============================================================================
+function handleToolDownload(toolId) {
+  const tool = state.tools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  const gpuParts = Array.isArray(tool.downloadGpuParts) ? tool.downloadGpuParts.filter(Boolean) : [];
+  const hasGpuChoice = Boolean(tool.downloadUrlGpu) || gpuParts.length > 0;
+
+  if (!hasGpuChoice) {
+    if (tool.downloadUrl && tool.downloadUrl !== '#') {
+      window.open(tool.downloadUrl, '_blank');
+    } else {
+      openDetailModal(toolId);
+    }
+    return;
+  }
+
+  let gpuActionHtml = '';
+  if (gpuParts.length > 1) {
+    const partButtons = gpuParts
+      .map(
+        (u, idx) =>
+          `<a href="${escapeHtml(u)}" target="_blank" rel="noopener" class="btn btn-primary" style="flex:1; justify-content:center;">
+            🚀 Tải Phần ${idx + 1}/${gpuParts.length} (.RAR)
+          </a>`
+      )
+      .join('');
+    gpuActionHtml = `
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">${partButtons}</div>
+      <div style="margin-top:8px; font-size:12px; color:#fbbf24; line-height:1.45;">
+        📌 Do bộ thư viện GPU NVIDIA rất lớn, file được chia làm ${gpuParts.length} phần: Bạn bấm tải đủ cả ${gpuParts.length} file bỏ chung vào 1 thư mục, rồi bấm chuột phải <strong>Giải nén (Extract) Phần 1</strong> là WinRAR tự động nối đầy đủ 100%!
+      </div>`;
+  } else {
+    const singleGpuUrl = tool.downloadUrlGpu || gpuParts[0];
+    gpuActionHtml = `
+      <a href="${escapeHtml(singleGpuUrl)}" target="_blank" rel="noopener" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:10px;">
+        🚀 Tải Bản NVIDIA GPU (.RAR)
+      </a>`;
+  }
+
+  const box = document.getElementById('downloadChoiceContent');
+  if (!box) return;
+
+  box.innerHTML = `
+    <p style="font-size:14px; color:var(--text-secondary); margin-bottom:16px;">
+      Phần mềm <strong style="color:#fff;">${escapeHtml(tool.name)}</strong> hỗ trợ 2 phiên bản tối ưu riêng theo cấu hình máy tính. Hãy chọn đúng bản phù hợp với máy của bạn:
+    </p>
+
+    <div style="display:grid; gap:14px; margin-bottom:16px;">
+      <!-- Lựa chọn 1: Bản CPU -->
+      <div style="padding:16px 18px; border-radius:14px; background:rgba(56,189,248,0.07); border:1px solid rgba(56,189,248,0.35);">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+          <strong style="font-size:16px; color:#fff;">💻 Tải Bản CPU (Máy yếu / Không có card rời)</strong>
+          <span class="mini-tag" style="color:#38bdf8; border-color:rgba(56,189,248,0.4);">~755 MB • Phổ thông</span>
+        </div>
+        <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.5;">
+          Dành cho Laptop, máy văn phòng hoặc máy tính không có card đồ họa rời. Chạy ổn định 100% trên mọi máy Windows 10/11.
+        </div>
+        <a href="${escapeHtml(tool.downloadUrl)}" target="_blank" rel="noopener" class="btn btn-outline" style="width:100%; justify-content:center; margin-top:10px; border-color:rgba(56,189,248,0.5); color:#e0f2fe;">
+          💻 Tải Bản CPU (.RAR)
+        </a>
+      </div>
+
+      <!-- Lựa chọn 2: Bản NVIDIA GPU -->
+      <div style="padding:16px 18px; border-radius:14px; background:rgba(124,58,237,0.11); border:1px solid rgba(168,85,247,0.5);">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+          <strong style="font-size:16px; color:#fff;">🚀 Tải Bản NVIDIA GPU (Tăng tốc x5 cho máy mạnh)</strong>
+          <span class="mini-tag" style="color:#d8b4fe; border-color:rgba(192,132,252,0.5);">NVIDIA GTX / RTX</span>
+        </div>
+        <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.5;">
+          Dành riêng cho máy cấu hình mạnh có Card đồ họa rời <strong>NVIDIA</strong>. Tốc độ tạo giọng đọc &amp; nhân bản giọng nói nhanh gấp 5 lần!
+        </div>
+        ${gpuActionHtml}
+      </div>
+    </div>
+
+    <div style="padding:12px 14px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px;">
+      <span style="font-size:12.5px; color:var(--text-secondary);">
+        🔑 Cả 2 bản dùng chung <strong>1 giá &amp; 1 Key bản quyền</strong> theo Mã máy (<code>DEVICE-...</code>).
+      </span>
+      <button type="button" class="btn btn-emerald btn-sm" onclick="closeModal('downloadChoiceModal'); openCheckoutModal('${escapeHtml(tool.id)}')">
+        ⚡ Mua Key Ngay
+      </button>
+    </div>
+  `;
+
+  openModal('downloadChoiceModal');
+}
+
+// ============================================================================
 // MODAL 1: CHI TIẾT TOOL & VIDEO DEMO
 // ============================================================================
 function openDetailModal(toolId) {
@@ -485,10 +579,14 @@ function openDetailModal(toolId) {
     )
     .join('');
 
-  const downloadBtnHtml =
-    tool.downloadUrl && tool.downloadUrl !== '#'
-      ? `<a href="${escapeHtml(tool.downloadUrl)}" target="_blank" rel="noopener" class="btn btn-outline btn-lg">📥 Tải Bản Cài Đặt (.ZIP/.RAR)</a>`
-      : `<a href="https://zalo.me/${String(state.settings.zalo || '0397022195').replace(/[^0-9]/g, '')}" target="_blank" rel="noopener" class="btn btn-zalo btn-lg">💬 Nhắn Zalo Nhận Link Tải</a>`;
+  const hasAnyDownload =
+    (tool.downloadUrl && tool.downloadUrl !== '#') ||
+    Boolean(tool.downloadUrlGpu) ||
+    (Array.isArray(tool.downloadGpuParts) && tool.downloadGpuParts.length > 0);
+
+  const downloadBtnHtml = hasAnyDownload
+    ? `<button type="button" class="btn btn-outline btn-lg" onclick="closeModal('detailModal'); handleToolDownload('${escapeHtml(tool.id)}')">📥 Tải Bản Cài Đặt (.RAR)</button>`
+    : `<a href="https://zalo.me/${String(state.settings.zalo || '0397022195').replace(/[^0-9]/g, '')}" target="_blank" rel="noopener" class="btn btn-zalo btn-lg">💬 Nhắn Zalo Nhận Link Tải</a>`;
 
   document.getElementById('detailModalContent').innerHTML = `
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">

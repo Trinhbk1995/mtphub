@@ -274,7 +274,13 @@ function renderAdminTools() {
   tbody.innerHTML = adminState.tools
     .map(t => {
       const priceText = (t.plans || []).map(p => `${esc(p.name)}: <strong>${fmtVnd(p.price)}</strong>`).join('<br/>');
-      const dlStatus = t.downloadUrl && t.downloadUrl !== '#' ? '✅ Đã gắn Link tải' : '⚪ Chưa gắn Link';
+      const hasGpu = Boolean(t.downloadUrlGpu) || (Array.isArray(t.downloadGpuParts) && t.downloadGpuParts.length > 0);
+      const dlStatus =
+        t.downloadUrl && t.downloadUrl !== '#'
+          ? hasGpu
+            ? '✅ 2 Bản (CPU + GPU)'
+            : '✅ Đã gắn Link tải'
+          : '⚪ Chưa gắn Link';
       const vidStatus = t.demoVideoUrl ? '🎬 Có Video Demo' : '🎨 Ảnh bìa tự động';
 
       return `
@@ -319,6 +325,7 @@ function openToolEditor(toolId) {
   document.getElementById('editToolVersion').value = t ? t.version || 'v1.0' : 'v1.0 Portable';
   document.getElementById('editToolShortDesc').value = t ? t.shortDesc || '' : '';
   document.getElementById('editToolDownloadUrl').value = t && t.downloadUrl !== '#' ? t.downloadUrl : '';
+  document.getElementById('editToolDownloadUrlGpu').value = t ? t.downloadUrlGpu || '' : '';
   document.getElementById('editToolDemoUrl').value = t ? t.demoVideoUrl || '' : '';
   document.getElementById('editToolTheme').value = t ? t.visualTheme || 'barchart' : 'barchart';
   document.getElementById('editToolCustomImg').value = t ? t.customImageUrl || '' : '';
@@ -397,6 +404,8 @@ async function saveToolFromModal(e) {
     version: document.getElementById('editToolVersion').value.trim(),
     shortDesc: document.getElementById('editToolShortDesc').value.trim(),
     downloadUrl: document.getElementById('editToolDownloadUrl').value.trim() || '#',
+    downloadUrlGpu: document.getElementById('editToolDownloadUrlGpu').value.trim(),
+    downloadGpuParts: (adminState.tools.find(item => item.id === document.getElementById('editToolId').value.trim()) || {}).downloadGpuParts || [],
     demoVideoUrl: document.getElementById('editToolDemoUrl').value.trim(),
     visualTheme: document.getElementById('editToolTheme').value,
     customImageUrl: document.getElementById('editToolCustomImg').value.trim(),

@@ -289,6 +289,17 @@
     </div>
   </div>
 
+  <!-- ======================================================================
+       MODAL 4: CHỌN PHIÊN BẢN TẢI VỀ (BẢN CPU HOẶC BẢN NVIDIA GPU)
+       ====================================================================== -->
+  <div id="downloadChoiceModal" class="modal-backdrop" onclick="closeBackdrop(event, 'downloadChoiceModal')">
+    <div class="modal-panel purple-glow" style="max-width:660px;">
+      <button class="modal-close" onclick="closeModal('downloadChoiceModal')">✕</button>
+      <div class="modal-title">📥 Chọn Phiên Bản Phù Hợp Với Máy Tính Của Bạn</div>
+      <div id="downloadChoiceContent"></div>
+    </div>
+  </div>
+
   <script src="js/default-data.js"></script>
   <script src="js/storefront.js"></script>
 </body>

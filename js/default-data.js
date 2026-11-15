@@ -1,5 +1,3 @@
-// Tệp dữ liệu công khai tự động đồng bộ từ Trang Quản Trị Admin MTP Hub
-// Dùng cho cả chế độ Hosting tĩnh 0đ (Cloudflare Pages / Vercel / GitHub Pages)
 window.MTPHUB_DEFAULT_DATA = {
   "settings": {
     "brandName": "MTP HUB • TRỊNH AI",
@@ -12,7 +10,7 @@ window.MTPHUB_DEFAULT_DATA = {
     "telegram": "0397022195",
     "telegramLink": "https://t.me/+84397022195",
     "supportHours": "08:00 - 23:30 (Trịnh AI hỗ trợ cài đặt & cấp Key 1-1)",
-    "announcement": "🔥 Trang chủ chính thức của Trịnh AI (mtphub.com): Hỗ trợ cài đặt UltraViewer 1-1 miễn phí & bảo hành cập nhật trọn đời!"
+    "announcement": "🔥 Trang chủ chính thức  (mtphub.com): Hỗ trợ cài đặt UltraViewer 1-1 miễn phí & bảo hành cập nhật trọn đời!"
   },
   "bankConfig": {
     "bankId": "MB",
@@ -74,23 +72,24 @@ window.MTPHUB_DEFAULT_DATA = {
       "id": "ai-voice-clone-pro",
       "code": "VOICE4",
       "name": "AI Voice Clone Pro V4.0",
-      "subtitle": "Tool Tạo Giọng Nói & Nhân Bản Giọng Đọc AI 100% CPU Offline",
+      "subtitle": "Tool Tạo Giọng Nói & Nhân Bản Giọng Đọc AI Offline (Bản CPU & NVIDIA GPU)",
       "category": "ai-voice",
-      "badge": "0Đ PHÍ API",
+      "badge": "CPU + GPU X5",
       "version": "v4.0 Portable",
       "visualTheme": "voiceclone",
       "demoVideoUrl": "",
       "downloadUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/AI_Voice_Clone_Pro_v4.0_Portable.rar",
+      "downloadUrlGpu": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/AI_Voice_Clone_Pro_v4.0_NVIDIA_GPU.rar",
       "requireHardwareId": true,
       "featured": true,
       "active": true,
-      "shortDesc": "Chuyển văn bản thành giọng nói (TTS) & Clone giọng đọc cá nhân chạy cục bộ 100% trên CPU máy tính. Không tốn tiền mua API, không giới hạn ký tự hàng tháng.",
+      "shortDesc": "Chuyển văn bản thành giọng nói (TTS) & Clone giọng đọc cá nhân chạy Offline 100% không tốn phí API. Tùy chọn tải riêng Bản CPU (máy yếu) hoặc Bản NVIDIA GPU (tăng tốc x5 cho máy khỏe).",
       "features": [
-        "Chạy hoàn toàn Offline trên CPU máy tính cá nhân — Không cần mạng, không tốn tiền mua ký tự API",
+        "Cung cấp đủ 2 phiên bản tối ưu riêng: Bản CPU (cho Laptop / máy yếu) & Bản NVIDIA GPU (tăng tốc x5 trên card rời)",
+        "Chạy hoàn toàn Offline trên máy tính cá nhân — Không cần mạng, 0đ phí API, không giới hạn ký tự hàng tháng",
         "Tích hợp 36 giọng Tiếng Việt truyền cảm (11 giọng Nano 24kHz & 25 giọng Turbo 48kHz đủ Bắc - Trung - Nam)",
         "Hỗ trợ giọng đọc Đa ngôn ngữ quốc tế (Anh, Nhật, Pháp...) phục vụ làm kênh YouTube ngoại",
-        "Nhân bản giọng nói (Voice Cloning) từ file mẫu WAV/MP3 + Hàng đợi tạo âm thanh hàng loạt chống tràn RAM",
-        "Giao diện Tiếng Việt Dark Mode hiện đại kèm trình nghe thử sóng âm (Waveform) & xuất WAV/MP3 chất lượng cao"
+        "Nhân bản giọng nói (Voice Cloning) từ file mẫu WAV/MP3 + Hàng đợi tạo âm thanh hàng loạt & xuất WAV/MP3 48kHz"
       ],
       "plans": [
         {
