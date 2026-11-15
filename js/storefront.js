@@ -412,7 +412,10 @@ function renderToolsGrid() {
           <span class="thumb-corner-tag">${tool.demoVideoUrl ? '🎬 Xem Video Hướng Dẫn' : '✨ Xem Tính Năng'}</span>
         </div>
 
-        <h3 class="tool-title">${escapeHtml(tool.name)}</h3>
+        <div class="tool-primary-role">${escapeHtml(tool.primaryRole || tool.name)}</div>
+        <div class="tool-name-badge-row">
+          <span class="tool-title mono">${escapeHtml(tool.name)}</span>
+        </div>
         <div class="tool-subtitle">${escapeHtml(tool.subtitle)}</div>
         <p class="tool-desc">${escapeHtml(tool.shortDesc)}</p>
 

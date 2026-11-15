@@ -24,8 +24,9 @@ window.MTPHUB_DEFAULT_DATA = {
     {
       "id": "youtube-multi-manager-pro",
       "code": "YTNUOI",
+      "primaryRole": "TOOL NUÔI KÊNH YOUTUBE",
       "name": "YouTube Multi Manager Pro",
-      "subtitle": "Tool Nuôi Ngâm & Quản Lý 5 – 100+ Kênh YouTube Tự Động 24/7",
+      "subtitle": "Nuôi Ngâm & Quản Lý 5 – 100+ Kênh YouTube Tự Động 24/7",
       "category": "channel-farming",
       "badge": "NUÔI KÊNH AN TOÀN",
       "version": "v2.1 Pro",
@@ -71,8 +72,9 @@ window.MTPHUB_DEFAULT_DATA = {
     {
       "id": "ai-voice-clone-pro",
       "code": "VOICE4",
+      "primaryRole": "TOOL TẠO GIỌNG NÓI & NHÂN BẢN GIỌNG AI",
       "name": "AI Voice Clone Pro V4.0",
-      "subtitle": "Tool Tạo Giọng Nói & Nhân Bản Giọng Đọc AI Offline (Bản CPU & NVIDIA GPU)",
+      "subtitle": "Chuyển Văn Bản & Clone Giọng 100% Offline (Bản CPU & NVIDIA GPU)",
       "category": "ai-voice",
       "badge": "CPU + GPU X5",
       "version": "v4.0 Portable",
@@ -119,8 +121,9 @@ window.MTPHUB_DEFAULT_DATA = {
     {
       "id": "infozoom-auto-studio-pro",
       "code": "DATARACE",
+      "primaryRole": "TOOL CHẠY DỮ LIỆU CÁC NĂM ĐĂNG YOUTUBE",
       "name": "InfoZoom Auto Studio Pro",
-      "subtitle": "Tool Làm Video Chạy Dữ Liệu Các Năm — Biểu Đồ Cột Đua 60FPS",
+      "subtitle": "Tự Động Làm Video Biểu Đồ Cột Đua Các Năm Chuẩn 60FPS",
       "category": "data-video",
       "badge": "4K 60FPS",
       "version": "v2.5 Portable",
