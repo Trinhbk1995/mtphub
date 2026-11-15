@@ -125,7 +125,7 @@ window.MTPHUB_DEFAULT_DATA = {
       "badge": "4K 60FPS",
       "version": "v2.5 Portable",
       "visualTheme": "barchart",
-      "demoVideoUrl": "",
+      "demoVideoUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/InfoZoom_Auto_Studio_Demo.mp4",
       "downloadUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/INFOZOOM_AUTO_STUDIO_PRO.rar",
       "requireHardwareId": true,
       "featured": true,
