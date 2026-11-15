@@ -336,7 +336,7 @@ function applySettingsToDom() {
   const floatZalo = document.getElementById('floatZalo');
   if (floatZalo) {
     floatZalo.href = zaloHref;
-    floatZalo.textContent = `💬 Zalo Trịnh AI: ${phoneDisplay}`;
+    floatZalo.textContent = `💬 Zalo: ${phoneDisplay}`;
   }
   const floatTele = document.getElementById('floatTele');
   if (floatTele) floatTele.href = teleHref;
@@ -420,7 +420,6 @@ function renderToolsGrid() {
         <p class="tool-desc">${escapeHtml(tool.shortDesc)}</p>
 
         <div class="tool-tags">
-          <span class="mini-tag">👑 Chính chủ Trịnh AI</span>
           <span class="mini-tag">⚡ Portable chạy ngay</span>
           <span class="mini-tag">🔒 Khóa máy Ed25519</span>
           ${hasMultiPlans ? `<span class="mini-tag">🔥 Chỉ từ ${formatVnd(minPlan.price)}</span>` : ''}
