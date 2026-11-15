@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MTP Hub Admin — Quản Trị Cửa Hàng & Cấp Key</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="toastWrap" class="toast-wrap"></div>
+
+  <!-- ======================================================================
+       MÀN HÌNH ĐĂNG NHẬP ADMIN
+       ====================================================================== -->
+  <div id="adminLoginScreen" style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;">
+    <div class="panel-card" style="width:100%; max-width:430px; padding:32px; border-color:rgba(124,58,237,0.45); box-shadow:var(--shadow-card);">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:22px;">
+        <div class="brand-mark">MTP</div>
+        <div>
+          <div style="font-weight:800; font-size:19px;">MTP HUB ADMIN</div>
+          <div style="font-size:12px; color:var(--accent-cyan);">Hệ thống quản trị dành riêng cho chủ shop</div>
+        </div>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label class="field-label" for="adminPassInput">Mật khẩu Quản trị viên</label>
+          <input
+            type="password"
+            id="adminPassInput"
+            class="input-control"
+            placeholder="Nhập mật khẩu Admin..."
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%; margin-top:6px;">
+          🔐 Đăng Nhập Quản Trị
+        </button>
+      </form>
+
+      <div style="margin-top:18px; text-align:center;">
+        <a href="./" style="font-size:13px; color:var(--text-secondary);">← Quay về trang chủ cửa hàng</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       GIAO DIỆN QUẢN TRỊ CHÍNH (DASHBOARD)
+       ====================================================================== -->
+  <div id="adminAppShell" class="admin-shell" style="display:none;">
+    <!-- Sidebar trái -->
+    <aside class="admin-sidebar">
+      <a href="./" class="brand" style="padding:6px 10px 18px;" title="Mở trang chủ">
+        <div class="brand-mark">MTP</div>
+        <div>
+          <span style="font-size:16px;">MTP ADMIN</span>
+          <span class="brand-sub">mtphub.com</span>
+        </div>
+      </a>
+
+      <button class="admin-nav-btn active" data-tab="orders" onclick="switchAdminTab('orders')">
+        📦 Đơn Hàng & Cấp Key
+      </button>
+      <button class="admin-nav-btn" data-tab="tools" onclick="switchAdminTab('tools')">
+        🛠️ Quản Lý Tool & Giá
+      </button>
+      <button class="admin-nav-btn" data-tab="vietqr" onclick="switchAdminTab('vietqr')">
+        🏦 Ngân Hàng VietQR
+      </button>
+      <button class="admin-nav-btn" data-tab="settings" onclick="switchAdminTab('settings')">
+        ⚙️ Cài Đặt Shop & Mật Khẩu
+      </button>
+
+      <div style="margin-top:auto; padding-top:18px; border-top:1px solid var(--border-subtle); display:flex; flex-direction:column; gap:8px;">
+        <a href="./" target="_blank" class="btn btn-outline btn-sm" style="justify-content:flex-start;">🌐 Xem Trang Web Khách</a>
+        <button type="button" class="btn btn-danger btn-sm" style="justify-content:flex-start;" onclick="logoutAdmin()">🚪 Đăng Xuất</button>
+      </div>
+    </aside>
+
+    <!-- Khu vực nội dung chính -->
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1 style="font-size:24px; font-weight:800;" id="adminPageTitle">Bảng Điều Khiển & Quản Lý Đơn Hàng</h1>
+          <p style="font-size:13.5px; color:var(--text-secondary);">Mọi thay đổi được lưu trực tiếp và cập nhật ngay lên trang bán hàng.</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button type="button" class="btn btn-outline" onclick="refreshDashboard()">🔄 Làm Mới</button>
+          <button type="button" class="btn btn-primary" onclick="openToolEditor(null)">➕ Thêm Tool Mới</button>
+        </div>
+      </div>
+
+      <!-- 4 Thẻ thống kê KPI -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">💰 Tổng Doanh Thu Đã Duyệt</div>
+          <div class="kpi-value" id="kpiRevenue" style="color:#34d399;">0đ</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">🔑 Key Bản Quyền Đã Cấp</div>
+          <div class="kpi-value" id="kpiActiveKeys">0 Keys</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">⏳ Đơn Hàng Chờ Xử Lý</div>
+          <div class="kpi-value" id="kpiPending" style="color:#fbbf24;">0 Đơn</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">🛠️ Tổng Số Tool Trong Kho</div>
+          <div class="kpi-value" id="kpiTotalTools">0 Tools</div>
+        </div>
+      </div>
+
+      <!-- TAB 1: QUẢN LÝ ĐƠN HÀNG & CẤP KEY -->
+      <section id="tab-orders" class="admin-tab-section">
+        <div class="panel-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px;">
+            <h2 style="font-size:18px; font-weight:800;">Quản Lý Đơn Hàng & Cấp Key Bản Quyền</h2>
+            <input
+              type="text"
+              id="orderSearchInput"
+              class="input-control"
+              style="max-width:300px;"
+              placeholder="Tìm SĐT, Mã máy, Mã đơn..."
+              oninput="renderAdminOrders()"
+            />
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Mã Đơn</th>
+                  <th>Khách Hàng (Zalo)</th>
+                  <th>Phần Mềm & Gói</th>
+                  <th>Mã Máy (Hardware ID)</th>
+                  <th>Số Tiền</th>
+                  <th>Trạng Thái</th>
+                  <th>Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody id="adminOrdersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: QUẢN LÝ TOOL & BẢNG GIÁ -->
+      <section id="tab-tools" class="admin-tab-section" style="display:none;">
+        <div class="panel-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h2 style="font-size:18px; font-weight:800;">Danh Sách Các Tool Đang Bán</h2>
+            <button type="button" class="btn btn-primary btn-sm" onclick="openToolEditor(null)">➕ Thêm Tool Mới</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Tên Phần Mềm</th>
+                  <th>Mã CK</th>
+                  <th>Bảng Giá Các Gói</th>
+                  <th>Link Tải & Video</th>
+                  <th>Hiển Thị</th>
+                  <th>Chỉnh Sửa</th>
+                </tr>
+              </thead>
+              <tbody id="adminToolsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: CẤU HÌNH NGÂN HÀNG VIETQR -->
+      <section id="tab-vietqr" class="admin-tab-section" style="display:none;">
+        <div class="panel-card">
+          <h2 style="font-size:18px; font-weight:800; margin-bottom:6px;">🏦 Cấu Hình Tài Khoản Nhận Tiền VietQR</h2>
+          <p style="font-size:13.5px; color:var(--text-secondary); margin-bottom:20px;">
+            Điền Số tài khoản ngân hàng của bạn để web tự động sinh mã QR chuyển khoản chính xác số tiền & nội dung cho khách quét.
+          </p>
+
+          <div class="checkout-grid">
+            <form onsubmit="saveBankSettings(event)">
+              <div class="form-group">
+                <label class="field-label">Chọn Ngân Hàng Nhận Tiền</label>
+                <select id="cfgBankId" class="input-control" onchange="updateAdminQrPreview()">
+                  <option value="MB|MB Bank (Quân Đội)">MB Bank (Ngân hàng Quân Đội)</option>
+                  <option value="VCB|Vietcombank">Vietcombank (Ngoại Thương)</option>
+                  <option value="TCB|Techcombank">Techcombank (Kỹ Thương)</option>
+                  <option value="ACB|ACB">ACB (Á Châu)</option>
+                  <option value="ICB|VietinBank">VietinBank (Công Thương)</option>
+                  <option value="BIDV|BIDV">BIDV (Đầu Tư & Phát Triển)</option>
+                  <option value="VPB|VPBank">VPBank (Việt Nam Thịnh Vượng)</option>
+                  <option value="TPB|TPBank">TPBank (Tiên Phong)</option>
+                  <option value="VBA|Agribank">Agribank</option>
+                  <option value="STB|Sacombank">Sacombank</option>
+                  <option value="VIB|VIB">VIB (Quốc Tế)</option>
+                  <option value="MSB|MSB">MSB (Hàng Hải)</option>
+                  <option value="HDB|HDBank">HDBank</option>
+                  <option value="OCB|OCB">OCB (Phương Đông)</option>
+                  <option value="TIMO|Timo">Timo Digital Bank</option>
+                  <option value="CAKE|Cake by VPBank">Cake by VPBank</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="field-label">Số Tài Khoản Ngân Hàng *</label>
+                <input
+                  type="text"
+                  id="cfgAccNo"
+                  class="input-control mono"
+                  placeholder="Nhập số tài khoản của bạn..."
+                  oninput="updateAdminQrPreview()"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="field-label">Tên Chủ Tài Khoản (Viết hoa không dấu) *</label>
+                <input
+                  type="text"
+                  id="cfgAccName"
+                  class="input-control mono"
+                  placeholder="VD: NGUYEN VAN A"
+                  oninput="updateAdminQrPreview()"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="field-label">Tiền tố nội dung chuyển khoản</label>
+                <input
+                  type="text"
+                  id="cfgMemoPrefix"
+                  class="input-control mono"
+                  placeholder="VD: MTP"
+                  oninput="updateAdminQrPreview()"
+                />
+              </div>
+
+              <button type="submit" class="btn btn-emerald btn-lg">💾 Lưu Cấu Hình VietQR</button>
+            </form>
+
+            <div>
+              <div class="vietqr-card">
+                <div class="vietqr-brand-row">
+                  <span class="vietqr-red">VietQR</span>
+                  <span style="color:#cbd5e1;">|</span>
+                  <span class="napas-blue">Xem Thử Mã QR</span>
+                </div>
+                <div class="qr-frame" id="adminQrPreviewBox"></div>
+                <div class="qr-scan-caption">Mã QR thử với số tiền 499.000đ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: CÀI ĐẶT SHOP, ZALO/TELE & ĐỔI MẬT KHẨU -->
+      <section id="tab-settings" class="admin-tab-section" style="display:none;">
+        <div class="panel-card">
+          <h2 style="font-size:18px; font-weight:800; margin-bottom:18px;">⚙️ Thông Tin Thương Hiệu & Liên Hệ</h2>
+          <form onsubmit="saveGeneralSettings(event)">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+              <div class="form-group">
+                <label class="field-label">Tên Thương Hiệu / Shop</label>
+                <input type="text" id="setBrandName" class="input-control" />
+              </div>
+              <div class="form-group">
+                <label class="field-label">Tên Miền Hiển Thị</label>
+                <input type="text" id="setDomain" class="input-control mono" />
+              </div>
+              <div class="form-group">
+                <label class="field-label">Số Điện Thoại Zalo Chính</label>
+                <input type="text" id="setZalo" class="input-control mono" />
+              </div>
+              <div class="form-group">
+                <label class="field-label">Link Telegram Nhận Tin Nhắn</label>
+                <input type="text" id="setTeleLink" class="input-control mono" placeholder="https://t.me/+84397022195 hoặc https://t.me/username" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="field-label">Tiêu Đề Lớn Đầu Trang (Hero Title)</label>
+              <input type="text" id="setHeroTitle" class="input-control" />
+            </div>
+
+            <div class="form-group">
+              <label class="field-label">Mô Tả Phụ Đầu Trang</label>
+              <textarea id="setHeroSubtitle" rows="2" class="input-control"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="field-label">Thanh Thông Báo Khuyến Mãi Trên Cùng</label>
+              <input type="text" id="setAnnouncement" class="input-control" />
+            </div>
+
+            <div class="form-group" style="max-width:420px; padding-top:10px; border-top:1px solid var(--border-subtle);">
+              <label class="field-label">Đổi Mật Khẩu Admin Mới (Bỏ trống nếu giữ nguyên)</label>
+              <input type="password" id="setNewPassword" class="input-control" placeholder="Tối thiểu 6 ký tự..." />
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:16px;">
+              <button type="submit" class="btn btn-primary btn-lg">💾 Lưu Mọi Cài Đặt</button>
+              <button type="button" class="btn btn-outline btn-lg" onclick="exportBackupJson()">📥 Tải Sao Lưu Dữ Liệu (.JSON)</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       MODAL CẤP KEY CHO KHÁCH HÀNG
+       ====================================================================== -->
+  <div id="issueKeyModal" class="modal-backdrop" onclick="if(event.target.id==='issueKeyModal') closeAdminModal('issueKeyModal')">
+    <div class="modal-panel" style="max-width:580px;">
+      <button class="modal-close" onclick="closeAdminModal('issueKeyModal')">✕</button>
+      <div class="modal-title">🔑 Cấp Key Bản Quyền & Cập Nhật Đơn Hàng</div>
+      <div id="issueOrderSummary" style="padding:12px 14px; border-radius:10px; background:rgba(255,255,255,0.04); margin-bottom:16px; font-size:13.5px;"></div>
+
+      <input type="hidden" id="issueOrderId" />
+      <div class="form-group">
+        <label class="field-label">Trạng Thái Đơn Hàng</label>
+        <select id="issueStatus" class="input-control">
+          <option value="pending">⏳ Chờ xác nhận thanh toán</option>
+          <option value="paid">💎 Đã nhận tiền (Chờ gửi Key)</option>
+          <option value="key_sent">✅ Đã cấp Key bản quyền (Hoàn tất)</option>
+          <option value="cancelled">❌ Đã hủy</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">Mã Máy Phần Cứng (Hardware ID)</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="issueHardwareId" class="input-control mono" />
+          <button type="button" class="btn btn-outline btn-sm" onclick="copyTextValue('issueHardwareId')">📋 Copy Mã Máy</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">Dán Mã Key Bản Quyền (VD: IZLIC1... hoặc Link tải riêng)</label>
+        <textarea
+          id="issueLicenseKey"
+          rows="3"
+          class="input-control mono"
+          placeholder="Dán chuỗi Key đã tạo từ tool cấp key của bạn vào đây. Khách vào mục Tra Cứu Key trên web sẽ nhận được ngay + tải được file license.lic!"
+        ></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+        <button type="button" class="btn btn-outline" onclick="closeAdminModal('issueKeyModal')">Hủy</button>
+        <button type="button" class="btn btn-emerald" onclick="saveIssuedKey()">✅ Lưu & Kích Hoạt Key Cho Khách</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL THÊM / CHỈNH SỬA TOOL & BẢNG GIÁ
+       ====================================================================== -->
+  <div id="toolEditorModal" class="modal-backdrop" onclick="if(event.target.id==='toolEditorModal') closeAdminModal('toolEditorModal')">
+    <div class="modal-panel purple-glow" style="max-width:780px;">
+      <button class="modal-close" onclick="closeAdminModal('toolEditorModal')">✕</button>
+      <div class="modal-title" id="toolEditorTitle">🛠️ Thêm / Chỉnh Sửa Phần Mềm</div>
+
+      <form onsubmit="saveToolFromModal(event)">
+        <input type="hidden" id="editToolId" />
+
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="field-label">Tên Phần Mềm *</label>
+            <input type="text" id="editToolName" class="input-control" required placeholder="VD: InfoZoom Auto Studio Pro" />
+          </div>
+          <div class="form-group">
+            <label class="field-label">Mã CK Ngắn</label>
+            <input type="text" id="editToolCode" class="input-control mono" placeholder="VD: IZPRO" />
+          </div>
+          <div class="form-group">
+            <label class="field-label">Nhãn Nổi Bật</label>
+            <input type="text" id="editToolBadge" class="input-control" placeholder="VD: BÁN CHẠY #1" />
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="field-label">Dòng Mô Tả Ngắn Dưới Tên</label>
+            <input type="text" id="editToolSubtitle" class="input-control" placeholder="VD: Hệ thống tự động hóa Video 60FPS" />
+          </div>
+          <div class="form-group">
+            <label class="field-label">Danh Mục Lọc</label>
+            <select id="editToolCategory" class="input-control">
+              <option value="channel-farming">Nuôi Kênh YouTube</option>
+              <option value="ai-voice">Tạo Giọng Nói AI</option>
+              <option value="data-video">Chạy Dữ Liệu Các Năm</option>
+              <option value="3d-studio">3D Studio 60FPS</option>
+              <option value="ai-automation">Veo3 & Video AI</option>
+              <option value="tiktok-ai">TikTok AI</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Phiên Bản</label>
+            <input type="text" id="editToolVersion" class="input-control mono" placeholder="v2.0 Pro" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Giới Thiệu Tóm Tắt (Hiện ngoài thẻ sản phẩm)</label>
+          <textarea id="editToolShortDesc" rows="2" class="input-control"></textarea>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="field-label">Link Tải Bản Cài Đặt (Google Drive / GitHub)</label>
+            <input type="text" id="editToolDownloadUrl" class="input-control mono" placeholder="https://drive.google.com/..." />
+          </div>
+          <div class="form-group">
+            <label class="field-label">Link Video Demo YouTube (Tùy chọn)</label>
+            <input type="text" id="editToolDemoUrl" class="input-control mono" placeholder="https://www.youtube.com/watch?v=..." />
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="field-label">Phong Cách Ảnh Bìa Tự Động</label>
+            <select id="editToolTheme" class="input-control">
+              <option value="ytmanager">Đồ họa Nuôi & Quản Lý Đa Kênh 24/7</option>
+              <option value="voiceclone">Đồ họa Sóng Âm AI Voice Clone</option>
+              <option value="barchart">Đồ họa Chạy Dữ Liệu Các Năm 60FPS</option>
+              <option value="gravity3d">Đồ họa Sân Khấu 3D Gravity</option>
+              <option value="veo3rain">Đồ họa Phố Mưa Điện Ảnh Veo3</option>
+              <option value="ytscout">Đồ họa Radar Săn Kênh Viral</option>
+              <option value="tiktokflow">Đồ họa Ảnh TikTok Flow AI</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Hoặc Link Ảnh Bìa Tùy Chỉnh (Nếu có)</label>
+            <input type="text" id="editToolCustomImg" class="input-control mono" placeholder="Bỏ trống để dùng đồ họa Studio tự động" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Danh Sách Tính Năng Chi Tiết (Mỗi dòng 1 tính năng)</label>
+          <textarea id="editToolFeatures" rows="4" class="input-control" placeholder="Bản Portable giải nén chạy ngay&#10;Xuất video 4K 60FPS siêu nét..."></textarea>
+        </div>
+
+        <!-- 3 Gói Giá -->
+        <label class="field-label" style="color:#34d399;">💎 Cấu Hình Bảng Giá (VNĐ — nhập số viết liền không dấu chấm, VD: 499000)</label>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:16px;">
+          <div style="padding:12px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle);">
+            <div style="font-weight:700; font-size:13px; margin-bottom:6px;">Gói 1 (Ngắn hạn)</div>
+            <input type="text" id="p1Name" class="input-control" style="margin-bottom:6px;" placeholder="Gói 1 Tháng" />
+            <input type="number" id="p1Price" class="input-control mono" style="margin-bottom:6px;" placeholder="Giá bán (VD: 199000)" />
+            <input type="number" id="p1Old" class="input-control mono" placeholder="Giá gạch ngang" />
+          </div>
+
+          <div style="padding:12px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle);">
+            <div style="font-weight:700; font-size:13px; margin-bottom:6px;">Gói 2 (Trung hạn)</div>
+            <input type="text" id="p2Name" class="input-control" style="margin-bottom:6px;" placeholder="Gói 6 Tháng" />
+            <input type="number" id="p2Price" class="input-control mono" style="margin-bottom:6px;" placeholder="Giá bán (VD: 349000)" />
+            <input type="number" id="p2Old" class="input-control mono" placeholder="Giá gạch ngang" />
+          </div>
+
+          <div style="padding:12px; border-radius:10px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.4);">
+            <div style="font-weight:700; font-size:13px; margin-bottom:6px; color:#34d399;">Gói 3 (Vĩnh Viễn - Nổi bật)</div>
+            <input type="text" id="p3Name" class="input-control" style="margin-bottom:6px;" placeholder="Vĩnh Viễn VIP" />
+            <input type="number" id="p3Price" class="input-control mono" style="margin-bottom:6px;" placeholder="Giá bán (VD: 499000)" />
+            <input type="number" id="p3Old" class="input-control mono" placeholder="Giá gạch ngang" />
+          </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px;">
+          <div style="display:flex; gap:18px; font-size:13.5px;">
+            <label style="display:flex; align-items:center; gap:7px; cursor:pointer;">
+              <input type="checkbox" id="editToolActive" checked /> Hiển thị bán trên Web
+            </label>
+            <label style="display:flex; align-items:center; gap:7px; cursor:pointer;">
+              <input type="checkbox" id="editToolReqHw" checked /> Yêu cầu nhập Mã máy
+            </label>
+          </div>
+
+          <div style="display:flex; gap:10px;">
+            <button type="button" class="btn btn-outline" onclick="closeAdminModal('toolEditorModal')">Đóng</button>
+            <button type="submit" class="btn btn-primary">💾 Lưu Phần Mềm</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
