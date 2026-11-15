@@ -1,16 +1,16 @@
 window.MTPHUB_DEFAULT_DATA = {
   "settings": {
-    "brandName": "MTP HUB",
-    "domain": "mtphub.com",
-    "heroBadge": "BỘ 3 CÔNG CỤ TỰ ĐỘNG HÓA YOUTUBE CHỦ LỰC",
+    "brandName": "MTP HUB • TRỊNH AI",
+    "domain": "mtphub.com • Chính chủ Trịnh AI",
+    "heroBadge": "HỆ SINH THÁI PHẦN MỀM CHÍNH CHỦ TỪ TRỊNH AI",
     "heroTitle": "Xây Dựng, Thuyết Minh & Sản Xuất Video Triệu View Tự Động",
-    "heroSubtitle": "Trọn bộ phần mềm Windows chính chủ từ MTP Hub: Nuôi dàn kênh YouTube an toàn 24/7, Nhân bản giọng đọc AI 100% Offline không tốn phí API, và Tạo video chạy dữ liệu biến thiên qua các năm 60FPS.",
+    "heroSubtitle": "Trọn bộ phần mềm Windows chính chủ do Trịnh AI phát triển: Nuôi dàn kênh YouTube an toàn 24/7, Nhân bản giọng đọc AI 100% Offline không tốn phí API, và Tạo video chạy dữ liệu biến thiên qua các năm 60FPS.",
     "phone": "0397022195",
     "zalo": "0397022195",
     "telegram": "0397022195",
     "telegramLink": "https://t.me/+84397022195",
-    "supportHours": "08:00 - 23:30 (Hỗ trợ cài đặt & cấp Key nhanh)",
-    "announcement": "🔥 Ưu đãi mở bán trên mtphub.com: Hỗ trợ cài đặt UltraViewer 1-1 miễn phí & bảo hành cập nhật trọn đời!"
+    "supportHours": "08:00 - 23:30 (Trịnh AI hỗ trợ cài đặt & cấp Key 1-1)",
+    "announcement": "🔥 Trang chủ chính thức của Trịnh AI (mtphub.com): Hỗ trợ cài đặt UltraViewer 1-1 miễn phí & bảo hành cập nhật trọn đời!"
   },
   "bankConfig": {
     "bankId": "MB",

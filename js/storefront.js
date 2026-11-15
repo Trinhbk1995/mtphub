@@ -336,13 +336,13 @@ function applySettingsToDom() {
   const floatZalo = document.getElementById('floatZalo');
   if (floatZalo) {
     floatZalo.href = zaloHref;
-    floatZalo.textContent = `💬 Chat Zalo: ${phoneDisplay}`;
+    floatZalo.textContent = `💬 Zalo Trịnh AI: ${phoneDisplay}`;
   }
   const floatTele = document.getElementById('floatTele');
   if (floatTele) floatTele.href = teleHref;
 
-  document.getElementById('footerBrand').textContent = `${s.brandName || 'MTP HUB'} — ${s.domain || 'mtphub.com'}`;
-  document.getElementById('footerSupport').innerHTML = `Hỗ trợ Zalo / Tele: <strong style="color:#fff;">${escapeHtml(phoneDisplay)}</strong>`;
+  document.getElementById('footerBrand').textContent = `${s.brandName || 'MTP HUB • TRỊNH AI'} — mtphub.com`;
+  document.getElementById('footerSupport').innerHTML = `Liên hệ Trịnh AI (Zalo / Tele): <strong style="color:#fff;">${escapeHtml(phoneDisplay)}</strong>`;
 }
 
 function getDisplayPlan(tool) {
@@ -414,6 +414,7 @@ function renderToolsGrid() {
         <p class="tool-desc">${escapeHtml(tool.shortDesc)}</p>
 
         <div class="tool-tags">
+          <span class="mini-tag">👑 Chính chủ Trịnh AI</span>
           <span class="mini-tag">⚡ Portable chạy ngay</span>
           <span class="mini-tag">🔒 Khóa máy Ed25519</span>
           ${hasMultiPlans ? `<span class="mini-tag">🔥 Chỉ từ ${formatVnd(minPlan.price)}</span>` : ''}
