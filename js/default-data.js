@@ -1,3 +1,5 @@
+// Tệp dữ liệu công khai tự động đồng bộ từ Trang Quản Trị Admin MTP Hub
+// Dùng cho cả chế độ Hosting tĩnh 0đ (Cloudflare Pages / Vercel / GitHub Pages)
 window.MTPHUB_DEFAULT_DATA = {
   "settings": {
     "brandName": "MTP HUB",
@@ -24,17 +26,19 @@ window.MTPHUB_DEFAULT_DATA = {
     {
       "id": "youtube-multi-manager-pro",
       "code": "YTNUOI",
-      "primaryRole": "TOOL NUÔI KÊNH YOUTUBE",
       "name": "YouTube Multi Manager Pro",
       "subtitle": "Nuôi Ngâm & Quản Lý 5 – 100+ Kênh YouTube Tự Động 24/7",
       "category": "channel-farming",
       "badge": "NUÔI KÊNH AN TOÀN",
       "version": "v2.1 Pro",
       "visualTheme": "ytmanager",
+      "customImageUrl": "",
       "demoVideoUrl": "",
       "downloadUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/YouTube_Multi_Manager_Pro_v2.1_Portable.rar",
+      "downloadUrlGpu": "",
+      "downloadGpuParts": [],
       "requireHardwareId": true,
-      "featured": true,
+      "featured": false,
       "active": true,
       "shortDesc": "Quản lý & nuôi độ trust từ 5 đến 100+ kênh YouTube trên 1 máy tính không cần Proxy/VPN. Mỗi kênh chạy Firefox Portable độc lập 100%, tự ngâm & ngủ đêm theo múi giờ thật.",
       "features": [
@@ -49,21 +53,23 @@ window.MTPHUB_DEFAULT_DATA = {
           "id": "1m",
           "name": "Gói 1 Tháng",
           "duration": "30 ngày",
-          "price": 199000,
-          "originalPrice": 299000
+          "price": 59000,
+          "originalPrice": 299000,
+          "popular": false
         },
         {
           "id": "6m",
           "name": "Gói 6 Tháng",
           "duration": "180 ngày",
-          "price": 349000,
-          "originalPrice": 599000
+          "price": 199000,
+          "originalPrice": 599000,
+          "popular": false
         },
         {
           "id": "lifetime",
           "name": "Vĩnh Viễn VIP",
           "duration": "Trọn đời + Update Free",
-          "price": 499000,
+          "price": 299000,
           "originalPrice": 899000,
           "popular": true
         }
@@ -72,18 +78,19 @@ window.MTPHUB_DEFAULT_DATA = {
     {
       "id": "ai-voice-clone-pro",
       "code": "VOICE4",
-      "primaryRole": "TOOL TẠO GIỌNG NÓI & NHÂN BẢN GIỌNG AI",
       "name": "AI Voice Clone Pro V4.0",
       "subtitle": "Chuyển Văn Bản & Clone Giọng 100% Offline (Bản CPU & NVIDIA GPU)",
       "category": "ai-voice",
       "badge": "CPU + GPU X5",
       "version": "v4.0 Portable",
       "visualTheme": "voiceclone",
+      "customImageUrl": "",
       "demoVideoUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/AI_Voice_Clone_Pro_v4_Huong_Dan.mp4",
       "downloadUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/AI_Voice_Clone_Pro_v4.0_Portable.rar",
       "downloadUrlGpu": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/AI_Voice_Clone_Pro_v4.0_NVIDIA_GPU.rar",
+      "downloadGpuParts": [],
       "requireHardwareId": true,
-      "featured": true,
+      "featured": false,
       "active": true,
       "shortDesc": "Chuyển văn bản thành giọng nói (TTS) & Clone giọng đọc cá nhân chạy Offline 100% không tốn phí API. Tùy chọn tải riêng Bản CPU (máy yếu) hoặc Bản NVIDIA GPU (tăng tốc x5 cho máy khỏe).",
       "features": [
@@ -98,22 +105,24 @@ window.MTPHUB_DEFAULT_DATA = {
           "id": "1m",
           "name": "Gói 1 Tháng",
           "duration": "30 ngày",
-          "price": 199000,
-          "originalPrice": 349000
+          "price": 99000,
+          "originalPrice": 299000,
+          "popular": false
         },
         {
           "id": "6m",
           "name": "Gói 6 Tháng",
           "duration": "180 ngày",
-          "price": 379000,
-          "originalPrice": 650000
+          "price": 199000,
+          "originalPrice": 499000,
+          "popular": false
         },
         {
           "id": "lifetime",
           "name": "Vĩnh Viễn VIP",
           "duration": "Trọn đời + Update Free",
-          "price": 549000,
-          "originalPrice": 990000,
+          "price": 299000,
+          "originalPrice": 999000,
           "popular": true
         }
       ]
@@ -121,17 +130,19 @@ window.MTPHUB_DEFAULT_DATA = {
     {
       "id": "infozoom-auto-studio-pro",
       "code": "DATARACE",
-      "primaryRole": "TOOL CHẠY DỮ LIỆU CÁC NĂM ĐĂNG YOUTUBE",
       "name": "InfoZoom Auto Studio Pro",
       "subtitle": "Tự Động Làm Video Biểu Đồ Cột Đua Các Năm Chuẩn 60FPS",
       "category": "data-video",
       "badge": "4K 60FPS",
       "version": "v2.5 Portable",
       "visualTheme": "barchart",
+      "customImageUrl": "",
       "demoVideoUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/InfoZoom_Auto_Studio_Demo.mp4",
       "downloadUrl": "https://github.com/Trinhbk1995/mtphub/releases/download/v1.0.0/INFOZOOM_AUTO_STUDIO_PRO.rar",
+      "downloadUrlGpu": "",
+      "downloadGpuParts": [],
       "requireHardwareId": true,
-      "featured": true,
+      "featured": false,
       "active": true,
       "shortDesc": "Tự động sản xuất video biểu đồ cột ngang biến thiên số liệu qua các năm (1950 – 2026) chuẩn 60FPS. Tự lấy dữ liệu AI miễn phí, tự tải quốc kỳ và ghép thuyết minh tự động.",
       "features": [
@@ -147,21 +158,23 @@ window.MTPHUB_DEFAULT_DATA = {
           "name": "Gói 1 Tháng",
           "duration": "30 ngày",
           "price": 199000,
-          "originalPrice": 299000
+          "originalPrice": 399000,
+          "popular": false
         },
         {
           "id": "6m",
           "name": "Gói 6 Tháng",
           "duration": "180 ngày",
           "price": 349000,
-          "originalPrice": 599000
+          "originalPrice": 699000,
+          "popular": false
         },
         {
           "id": "lifetime",
           "name": "Vĩnh Viễn VIP",
           "duration": "Trọn đời + Update Free",
           "price": 499000,
-          "originalPrice": 899000,
+          "originalPrice": 999000,
           "popular": true
         }
       ]
