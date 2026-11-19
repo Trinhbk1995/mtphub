@@ -53,7 +53,7 @@ window.MTPHUB_DEFAULT_DATA = {
           "id": "1m",
           "name": "Gói 1 Tháng",
           "duration": "30 ngày",
-          "price": 59000,
+          "price": 9900,
           "originalPrice": 299000,
           "popular": false
         },
@@ -61,7 +61,7 @@ window.MTPHUB_DEFAULT_DATA = {
           "id": "6m",
           "name": "Gói 6 Tháng",
           "duration": "180 ngày",
-          "price": 199000,
+          "price": 59000,
           "originalPrice": 599000,
           "popular": false
         },
@@ -69,7 +69,7 @@ window.MTPHUB_DEFAULT_DATA = {
           "id": "lifetime",
           "name": "Vĩnh Viễn VIP",
           "duration": "Trọn đời + Update Free",
-          "price": 299000,
+          "price": 99000,
           "originalPrice": 899000,
           "popular": true
         }
@@ -105,7 +105,7 @@ window.MTPHUB_DEFAULT_DATA = {
           "id": "1m",
           "name": "Gói 1 Tháng",
           "duration": "30 ngày",
-          "price": 99000,
+          "price": 19000,
           "originalPrice": 299000,
           "popular": false
         },
@@ -113,7 +113,7 @@ window.MTPHUB_DEFAULT_DATA = {
           "id": "6m",
           "name": "Gói 6 Tháng",
           "duration": "180 ngày",
-          "price": 199000,
+          "price": 99000,
           "originalPrice": 499000,
           "popular": false
         },
@@ -121,7 +121,7 @@ window.MTPHUB_DEFAULT_DATA = {
           "id": "lifetime",
           "name": "Vĩnh Viễn VIP",
           "duration": "Trọn đời + Update Free",
-          "price": 299000,
+          "price": 139000,
           "originalPrice": 999000,
           "popular": true
         }
